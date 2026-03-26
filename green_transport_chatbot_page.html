@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Transport Bot</title>
+  <style>
+    :root {
+      --bg: #f5f8f7;
+      --card: #ffffff;
+      --text: #18312a;
+      --muted: #5a6b66;
+      --accent: #2e7d32;
+      --accent-2: #66bb6a;
+      --border: #dbe7df;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef7f1 0%, #f7faf8 100%);
+      color: var(--text);
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 20px 120px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .content {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 18px 40px rgba(22, 54, 39, 0.08);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #e8f5e9;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 48px;
+      line-height: 1.1;
+      margin: 0 0 16px;
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .feature {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 10px 24px rgba(22, 54, 39, 0.05);
+    }
+
+    .feature h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .feature p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .side-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 18px 40px rgba(22, 54, 39, 0.08);
+    }
+
+    .side-panel h2 {
+      margin-top: 0;
+      font-size: 26px;
+    }
+
+    .questions {
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 0;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #6d7d78;
+    }
+
+    df-messenger {
+      --df-messenger-bot-message: #e8f5e9;
+      --df-messenger-button-titlebar-color: #2e7d32;
+      --df-messenger-chat-background-color: #fafdfb;
+      --df-messenger-font-color: #18312a;
+      --df-messenger-send-icon: #2e7d32;
+      --df-messenger-user-message: #d9f2dd;
+      z-index: 999;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .content,
+      .side-panel {
+        padding: 28px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="container">
+      <div class="content">
+        <span class="badge">Green Transport Assistant</span>
+        <h1>Explore green transport research with a chatbot.</h1>
+        <p>
+          This webpage presents the Green Transport Bot, a Dialogflow-powered assistant
+          that helps users ask questions about sustainable transportation topics such as
+          urban navigation, UAV applications, railway applications, autonomous infrastructure,
+          energy storage, and technical constraints.
+        </p>
+        <p>
+          Click the chatbot icon in the bottom-right corner to start chatting.
+        </p>
+
+        <div class="features">
+          <div class="feature">
+            <h3>Topic-based answers</h3>
+            <p>Ask about green transportation categories and get quick responses.</p>
+          </div>
+          <div class="feature">
+            <h3>Simple web interface</h3>
+            <p>The chatbot stays docked at the bottom-right corner of the page.</p>
+          </div>
+          <div class="feature">
+            <h3>Dialogflow integration</h3>
+            <p>Powered by Dialogflow Messenger for a clean and lightweight frontend.</p>
+          </div>
+          <div class="feature">
+            <h3>Easy to submit</h3>
+            <p>You can host this page and include the link in your presentation or report.</p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <h2>Try asking:</h2>
+        <ul class="questions">
+          <li>What are the applications of UAVs in green transport?</li>
+          <li>How does energy storage affect electric transportation?</li>
+          <li>What are the railway applications in sustainable mobility?</li>
+          <li>What are the technical constraints in green transport systems?</li>
+          <li>How does autonomous infrastructure support urban navigation?</li>
+        </ul>
+        <p class="footer-note">
+          The chatbot launcher will appear in the bottom-right corner after the Dialogflow Messenger script loads.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Dialogflow Messenger -->
+  <!-- Replace the placeholders below with the values from Dialogflow ES > Integrations > Dialogflow Messenger -->
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+  <df-messenger
+    intent="WELCOME"
+    chat-title="Green-Transport-Bot"
+    agent-id="89d00aa2-bd25-473a-8709-c489212f2378"
+    language-code="en"
+  ></df-messenger>
+</body>
+</html>
