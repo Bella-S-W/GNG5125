@@ -6,13 +6,12 @@
   <title>Green Transport Bot</title>
   <style>
     :root {
-      --bg: #f5f8f7;
       --card: #ffffff;
       --text: #18312a;
       --muted: #5a6b66;
       --accent: #2e7d32;
-      --accent-2: #66bb6a;
       --border: #dbe7df;
+      --shadow: 0 18px 40px rgba(22, 54, 39, 0.08);
     }
 
     * {
@@ -21,6 +20,7 @@
 
     body {
       margin: 0;
+      min-height: 100vh;
       font-family: Arial, Helvetica, sans-serif;
       background: linear-gradient(180deg, #eef7f1 0%, #f7faf8 100%);
       color: var(--text);
@@ -43,13 +43,21 @@
       align-items: center;
     }
 
-    .content {
-      background: rgba(255, 255, 255, 0.78);
+    .content,
+    .side-panel {
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(6px);
       border: 1px solid var(--border);
       border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .content {
       padding: 40px;
-      box-shadow: 0 18px 40px rgba(22, 54, 39, 0.08);
+    }
+
+    .side-panel {
+      padding: 28px;
     }
 
     .badge {
@@ -67,6 +75,11 @@
       font-size: 48px;
       line-height: 1.1;
       margin: 0 0 16px;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 26px;
     }
 
     p {
@@ -102,19 +115,6 @@
       line-height: 1.5;
     }
 
-    .side-panel {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 28px;
-      box-shadow: 0 18px 40px rgba(22, 54, 39, 0.08);
-    }
-
-    .side-panel h2 {
-      margin-top: 0;
-      font-size: 26px;
-    }
-
     .questions {
       padding-left: 18px;
       color: var(--muted);
@@ -128,14 +128,121 @@
       color: #6d7d78;
     }
 
-    df-messenger {
-      --df-messenger-bot-message: #e8f5e9;
-      --df-messenger-button-titlebar-color: #2e7d32;
-      --df-messenger-chat-background-color: #fafdfb;
-      --df-messenger-font-color: #18312a;
-      --df-messenger-send-icon: #2e7d32;
-      --df-messenger-user-message: #d9f2dd;
-      z-index: 999;
+    .chat-launcher {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 64px;
+      height: 64px;
+      border: none;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #ffffff;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 16px 30px rgba(46, 125, 50, 0.35);
+      z-index: 1001;
+    }
+
+    .chat-launcher:hover {
+      background: #256628;
+    }
+
+    .chat-panel {
+      position: fixed;
+      right: 24px;
+      bottom: 100px;
+      width: min(420px, calc(100vw - 32px));
+      height: min(650px, calc(100vh - 140px));
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 20px 48px rgba(17, 43, 31, 0.18);
+      overflow: hidden;
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+    }
+
+    .chat-panel.open {
+      display: flex;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      background: var(--accent);
+      color: #ffffff;
+      gap: 10px;
+    }
+
+    .chat-header-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .chat-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .chat-link,
+    .chat-close {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .chat-link {
+      background: #ffffff;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .chat-close {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .chat-body {
+      position: relative;
+      flex: 1;
+      background: #f9fcfa;
+    }
+
+    .chat-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #ffffff;
+    }
+
+    .chat-fallback {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      box-shadow: 0 10px 24px rgba(22, 54, 39, 0.08);
+    }
+
+    .chat-fallback a {
+      color: var(--accent);
+      font-weight: 700;
     }
 
     @media (max-width: 900px) {
@@ -165,13 +272,12 @@
         <span class="badge">Green Transport Assistant</span>
         <h1>Explore green transport research with a chatbot.</h1>
         <p>
-          This webpage presents the Green Transport Bot, a Dialogflow-powered assistant
-          that helps users ask questions about sustainable transportation topics such as
-          urban navigation, UAV applications, railway applications, autonomous infrastructure,
-          energy storage, and technical constraints.
+          This webpage presents the Green Transport Bot, a chatbot assistant for sustainable
+          transportation topics such as urban navigation, UAV applications, railway systems,
+          autonomous infrastructure, energy storage, and technical constraints.
         </p>
         <p>
-          Click the chatbot icon in the bottom-right corner to start chatting.
+          Click the chat icon in the bottom-right corner to open the live chatbot on this page.
         </p>
 
         <div class="features">
@@ -180,16 +286,16 @@
             <p>Ask about green transportation categories and get quick responses.</p>
           </div>
           <div class="feature">
-            <h3>Simple web interface</h3>
-            <p>The chatbot stays docked at the bottom-right corner of the page.</p>
+            <h3>Floating chat widget</h3>
+            <p>The chatbot opens from the bottom-right corner like a real website assistant.</p>
           </div>
           <div class="feature">
-            <h3>Dialogflow integration</h3>
-            <p>Powered by Dialogflow Messenger for a clean and lightweight frontend.</p>
+            <h3>Live Dialogflow demo</h3>
+            <p>The page loads your existing Dialogflow web demo inside the chat panel.</p>
           </div>
           <div class="feature">
-            <h3>Easy to submit</h3>
-            <p>You can host this page and include the link in your presentation or report.</p>
+            <h3>Submission-ready</h3>
+            <p>You can host this page and share the link with your professor for evaluation.</p>
           </div>
         </div>
       </div>
@@ -204,21 +310,82 @@
           <li>How does autonomous infrastructure support urban navigation?</li>
         </ul>
         <p class="footer-note">
-          The chatbot launcher will appear in the bottom-right corner after the Dialogflow Messenger script loads.
+          If your browser blocks the embedded chat, use the open button in the chat header to launch the same chatbot in a new tab.
         </p>
       </aside>
     </div>
   </section>
 
-  <!-- Dialogflow Messenger -->
-  <!-- Replace the placeholders below with the values from Dialogflow ES > Integrations > Dialogflow Messenger -->
-  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <button class="chat-launcher" id="chatLauncher" aria-controls="chatPanel" aria-expanded="false" aria-label="Open chatbot">
+    💬
+  </button>
 
-  <df-messenger
-    intent="WELCOME"
-    chat-title="Green-Transport-Bot"
-    agent-id="89d00aa2-bd25-473a-8709-c489212f2378"
-    language-code="en"
-  ></df-messenger>
+  <section class="chat-panel" id="chatPanel" aria-label="Green Transport chatbot panel">
+    <div class="chat-header">
+      <div class="chat-header-title">Green-Transport-Bot</div>
+      <div class="chat-actions">
+        <a
+          class="chat-link"
+          href="https://console.dialogflow.com/api-client/demo/embedded/89d00aa2-bd25-473a-8709-c489212f2378"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open
+        </a>
+        <button class="chat-close" id="chatClose" type="button" aria-label="Close chatbot">✕</button>
+      </div>
+    </div>
+    <div class="chat-body">
+      <iframe
+        class="chat-frame"
+        title="Green Transport Bot"
+        src="https://console.dialogflow.com/api-client/demo/embedded/89d00aa2-bd25-473a-8709-c489212f2378"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+      ></iframe>
+      <div class="chat-fallback">
+        If the chat window does not load here, click
+        <a href="https://console.dialogflow.com/api-client/demo/embedded/89d00aa2-bd25-473a-8709-c489212f2378" target="_blank" rel="noopener noreferrer">Open</a>
+        to use the same chatbot directly in Dialogflow.
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const chatLauncher = document.getElementById('chatLauncher');
+    const chatPanel = document.getElementById('chatPanel');
+    const chatClose = document.getElementById('chatClose');
+
+    function openChat() {
+      chatPanel.classList.add('open');
+      chatLauncher.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeChat() {
+      chatPanel.classList.remove('open');
+      chatLauncher.setAttribute('aria-expanded', 'false');
+    }
+
+    chatLauncher.addEventListener('click', () => {
+      if (chatPanel.classList.contains('open')) {
+        closeChat();
+      } else {
+        openChat();
+      }
+    });
+
+    chatClose.addEventListener('click', closeChat);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeChat();
+      }
+    });
+
+    // Lightweight self-checks for this static page.
+    console.assert(!!chatLauncher, 'Expected the chat launcher button to exist.');
+    console.assert(!!chatPanel, 'Expected the chat panel to exist.');
+    console.assert(!!chatClose, 'Expected the chat close button to exist.');
+  </script>
 </body>
 </html>
